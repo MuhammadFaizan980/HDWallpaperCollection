@@ -8,4 +8,5 @@
     android:background="@color/colorPrimary"
     android:elevation="5dp"
     android:orientation="vertical"
+    android:theme="@style/toolbarStyle"
     app:layout_scrollFlags="scroll|enterAlways" />
