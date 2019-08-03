@@ -52,7 +52,31 @@ class FragmentMain : Fragment() {
                     adapter.notifyDataSetChanged()
                 }
         } else {
-            //TODO: Populate wallpapers later
+            //TODO: Populate new wallpaper later
+            val list = ArrayList<WallpaperModel>()
+            val adapter = WallpaperAdapter(activity!!.applicationContext, activity!!, list)
+            recyclerView.layoutManager = GridLayoutManager(activity!!.applicationContext, 2)
+            recyclerView.adapter = adapter
+            collectionReference.orderBy("server_time_stamp", Query.Direction.DESCENDING)
+                .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                    list.clear()
+                    if (firebaseFirestoreException == null && querySnapshot != null && !querySnapshot.isEmpty) {
+                        for (i in querySnapshot.documents) {
+                            val obj: WallpaperModel = i.toObject(WallpaperModel::class.java)!!
+                            obj.wallpaper_key = i.id
+                            if (((System.currentTimeMillis() / 1000) - obj.server_time_stamp!!.seconds) <= 604800) {
+                                list.add(obj)
+                            }
+                        }
+                    } else {
+                        Toast.makeText(
+                            activity!!.applicationContext,
+                            firebaseFirestoreException!!.message!!,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    adapter.notifyDataSetChanged()
+                }
         }
     }
 
