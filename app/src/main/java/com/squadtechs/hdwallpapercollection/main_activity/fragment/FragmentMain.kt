@@ -29,6 +29,7 @@ class FragmentMain : Fragment() {
 
     private fun populateRecyclerView(view: View) {
         if (arguments!!.getInt("position", -1) == 0) {
+            //categories code
             val list = ArrayList<CategoryModel>()
             val adapter = CategoryAdapter(activity!!.applicationContext, activity!!, list)
             recyclerView.layoutManager = GridLayoutManager(activity!!.applicationContext, 2)
@@ -52,7 +53,7 @@ class FragmentMain : Fragment() {
                     adapter.notifyDataSetChanged()
                 }
         } else {
-            //TODO: Populate new wallpaper later
+            //new wallpaper code
             val list = ArrayList<WallpaperModel>()
             val adapter = WallpaperAdapter(activity!!.applicationContext, activity!!, list)
             recyclerView.layoutManager = GridLayoutManager(activity!!.applicationContext, 2)
