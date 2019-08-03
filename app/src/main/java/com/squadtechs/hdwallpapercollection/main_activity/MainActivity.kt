@@ -31,11 +31,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         prepareToolbar()
         prepareNavigationView()
         prepareViewPager()
-        setTabListener()
-    }
-
-    private fun setTabListener() {
-
     }
 
     private fun prepareViewPager() {
