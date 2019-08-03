@@ -6,10 +6,7 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
@@ -43,13 +40,16 @@ class CategoryAdapter(val context: Context, val activity: Activity, val list: Ar
         val imageRequest = ImageRequest(
             list[position].category_image_url,
             Response.Listener { response ->
+                holder.imgGrid.scaleType = ImageView.ScaleType.CENTER
                 holder.imgGrid.setImageBitmap(response)
+                holder.progress.visibility = View.GONE
             },
             800,
             600,
             ImageView.ScaleType.CENTER,
             null,
             Response.ErrorListener { error ->
+                holder.progress.visibility = View.GONE
                 Toast.makeText(context, "Error loading Image", Toast.LENGTH_LONG).show()
             })
         requestQueue.add(imageRequest)
@@ -70,6 +70,7 @@ class CategoryAdapter(val context: Context, val activity: Activity, val list: Ar
     }
 
     inner class CategoryHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val progress: ProgressBar = view.findViewById(R.id.progress)
         val frame: FrameLayout = view.findViewById(R.id.grid_frame)
         val imgGrid: RoundedImageView = view.findViewById(R.id.img_grid)
         val txtCategory: TextView = view.findViewById(R.id.txt_grid_cell)

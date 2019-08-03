@@ -1,5 +1,6 @@
 package com.squadtechs.hdwallpapercollection.main_activity
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -36,6 +37,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun prepareViewPager() {
         viewPager.adapter = pagerAdapter
         txtCategory.textSize = 18f
+        txtCategory.setBackgroundColor(Color.parseColor("#FF2C2C2C"))
+        txtNew.setTextColor(Color.parseColor("#FFC9C9C9"))
+        txtCategory.setTextColor(Color.parseColor("#FFFFFF"))
         viewPager.setOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
             }
@@ -47,9 +51,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 if (position == 0) {
                     txtCategory.textSize = 18f
                     txtNew.textSize = 14f
+                    txtNew.setTextColor(Color.parseColor("#FFC9C9C9"))
+                    txtCategory.setTextColor(Color.parseColor("#FFFFFF"))
+                    txtCategory.setBackgroundColor(Color.parseColor("#FF2C2C2C"))
+                    txtNew.setBackgroundColor(Color.parseColor("#424242"))
                 } else {
                     txtNew.textSize = 18f
                     txtCategory.textSize = 14f
+                    txtNew.setTextColor(Color.parseColor("#FFFFFF"))
+                    txtCategory.setTextColor(Color.parseColor("#FFC9C9C9"))
+                    txtNew.setBackgroundColor(Color.parseColor("#FF2C2C2C"))
+                    txtCategory.setBackgroundColor(Color.parseColor("#424242"))
                 }
             }
         })
@@ -81,16 +93,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     public fun txtCategoryListener(view: View) {
-
         viewPager.currentItem = 0
         this.txtCategory.textSize = 18f
         txtNew.textSize = 14f
+        txtNew.setTextColor(Color.parseColor("#FFC9C9C9"))
+        txtCategory.setTextColor(Color.parseColor("#FFFFFF"))
+        txtCategory.setBackgroundColor(Color.parseColor("#FF2C2C2C"))
+        txtNew.setBackgroundColor(Color.parseColor("#424242"))
     }
 
     public fun txtNewListener(view: View) {
         viewPager.currentItem = 1
         txtNew.textSize = 18f
         txtCategory.textSize = 14f
+        txtNew.setTextColor(Color.parseColor("#FFFFFF"))
+        txtCategory.setTextColor(Color.parseColor("#FFC9C9C9"))
+        txtNew.setBackgroundColor(Color.parseColor("#FF2C2C2C"))
+        txtCategory.setBackgroundColor(Color.parseColor("#424242"))
     }
 
 }

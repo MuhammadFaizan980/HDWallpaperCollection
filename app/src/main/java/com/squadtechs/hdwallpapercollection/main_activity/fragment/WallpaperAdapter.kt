@@ -6,10 +6,7 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
@@ -44,7 +41,9 @@ class WallpaperAdapter(val context: Context, val activity: Activity, val list: A
         val imageRequest = ImageRequest(
             list[position].wallpaper_image_url,
             Response.Listener { response ->
+                holder.imgGrid.scaleType = ImageView.ScaleType.CENTER
                 holder.imgGrid.setImageBitmap(response)
+                holder.progress.visibility = View.GONE
             },
             800,
             600,
@@ -52,6 +51,7 @@ class WallpaperAdapter(val context: Context, val activity: Activity, val list: A
             null,
             Response.ErrorListener { error ->
                 Toast.makeText(context, "Error loading Image", Toast.LENGTH_LONG).show()
+                holder.progress.visibility = View.GONE
             })
         requestQueue.add(imageRequest)
         holder.txtCategory.visibility = View.GONE
@@ -71,6 +71,7 @@ class WallpaperAdapter(val context: Context, val activity: Activity, val list: A
     }
 
     inner class WallpaperHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val progress: ProgressBar = view.findViewById(R.id.progress)
         val frame: FrameLayout = view.findViewById(R.id.grid_frame)
         val imgGrid: RoundedImageView = view.findViewById(R.id.img_grid)
         val txtCategory: TextView = view.findViewById(R.id.txt_grid_cell)
