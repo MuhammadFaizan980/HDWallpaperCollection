@@ -7,12 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.Response
+import com.android.volley.toolbox.ImageRequest
+import com.android.volley.toolbox.Volley
 import com.makeramen.roundedimageview.RoundedImageView
 import com.squadtechs.hdwallpapercollection.R
-import com.squareup.picasso.Picasso
 
 class CategoryAdapter(val context: Context, val activity: Activity, val list: ArrayList<CategoryModel>) :
     RecyclerView.Adapter<CategoryAdapter.CategoryHolder>() {
@@ -36,7 +39,20 @@ class CategoryAdapter(val context: Context, val activity: Activity, val list: Ar
     }
 
     private fun populateViews(holder: CategoryHolder, position: Int) {
-        Picasso.get().load(list[position].category_image_url).into(holder.imgGrid)
+        val requestQueue = Volley.newRequestQueue(context)
+        val imageRequest = ImageRequest(
+            list[position].category_image_url,
+            Response.Listener { response ->
+                holder.imgGrid.setImageBitmap(response)
+            },
+            800,
+            600,
+            ImageView.ScaleType.CENTER,
+            null,
+            Response.ErrorListener { error ->
+                Toast.makeText(context, "Error loading Image", Toast.LENGTH_LONG).show()
+            })
+        requestQueue.add(imageRequest)
         holder.txtCategory.text = list[position].category_name
     }
 
