@@ -1,37 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
-    tools:context=".MainActivity">
+    tools:context=".main_activity.MainActivity">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <include layout="@layout/appbar_layout" />
-
-        <RelativeLayout
+        <FrameLayout
+            android:id="@+id/main_id"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:layout_height="match_parent">
 
-            <include layout="@layout/listview_layout" />
+            <include layout="@layout/toolbar" />
 
-        </RelativeLayout>
+            <include layout="@layout/custom_tabs" />
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <com.wang.avi.AVLoadingIndicatorView
-        android:id="@+id/loader"
-        style="@style/AVLoadingIndicatorView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:visibility="invisible"
-        app:indicatorColor="#656565"
-        app:indicatorName="BallClipRotatePulseIndicator" />
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="100dp"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-</FrameLayout>
+            <com.wang.avi.AVLoadingIndicatorView
+                android:id="@+id/loader"
+                style="@style/AVLoadingIndicatorView"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                app:indicatorColor="#656565"
+                app:indicatorName="BallClipRotatePulseIndicator" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:backgroundTint="@color/colorAccent"
+        app:headerLayout="@layout/header_layout"
+        app:itemIconTint="#95FFFFFF"
+        app:itemTextColor="#95FFFFFF"
+        app:menu="@menu/menu_main" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

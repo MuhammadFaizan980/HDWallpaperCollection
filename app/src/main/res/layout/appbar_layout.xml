@@ -5,4 +5,6 @@
     android:orientation="vertical">
 
     <include layout="@layout/toolbar" />
+
+    <include layout="@layout/custom_tabs" />
 </com.google.android.material.appbar.AppBarLayout>
