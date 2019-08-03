@@ -1,12 +1,10 @@
 package com.squadtechs.hdwallpapercollection.main_activity.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.squadtechs.hdwallpapercollection.R
 
@@ -21,6 +19,5 @@ class FragmentMain : Fragment() {
         txt.text = arguments!!.getInt("position", -1).toString()
         return view
     }
-
 
 }
