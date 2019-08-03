@@ -7,14 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.makeramen.roundedimageview.RoundedImageView
 import com.squadtechs.hdwallpapercollection.R
 import com.squareup.picasso.Picasso
 
-class CategoryAdapter(val context: Context, val list: ArrayList<CategoryModel>) :
+class CategoryAdapter(val context: Context, val activity: Activity, val list: ArrayList<CategoryModel>) :
     RecyclerView.Adapter<CategoryAdapter.CategoryHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryHolder =
         CategoryHolder(LayoutInflater.from(context).inflate(R.layout.grid_cell, parent, false))
@@ -42,21 +42,21 @@ class CategoryAdapter(val context: Context, val list: ArrayList<CategoryModel>) 
 
     private fun adjustScreen(holder: CategoryHolder, position: Int) {
         val displayMetrics = DisplayMetrics()
-        (context as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
+        activity.windowManager.defaultDisplay.getMetrics(displayMetrics)
         val height = displayMetrics.heightPixels
         val width = displayMetrics.widthPixels
-        holder.frame.layoutParams = FrameLayout.LayoutParams((width / 2), ((32 * height) / 100))
+        holder.frame.layoutParams = FrameLayout.LayoutParams((width / 2), ((25 * height) / 100))
         if (position % 2 == 0) {
-            holder.frame.setPadding(32, 32, 16, 0)
+            holder.frame.setPadding(32, 16, 16, 16)
         } else {
-            holder.frame.setPadding(16, 32, 32, 0)
+            holder.frame.setPadding(16, 16, 32, 16)
         }
     }
 
     inner class CategoryHolder(view: View) : RecyclerView.ViewHolder(view) {
         val frame: FrameLayout = view.findViewById(R.id.grid_frame)
-        val imgGrid: ImageView = view.findViewById(R.id.img_grid)
-        val txtCategory: TextView = view.findViewById(R.id.txt_categories)
+        val imgGrid: RoundedImageView = view.findViewById(R.id.img_grid)
+        val txtCategory: TextView = view.findViewById(R.id.txt_grid_cell)
         val touchView: View = view.findViewById(R.id.grid_touch_view)
     }
 }
