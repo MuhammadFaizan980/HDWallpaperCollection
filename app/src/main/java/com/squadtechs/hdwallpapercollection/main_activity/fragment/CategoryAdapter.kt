@@ -2,6 +2,7 @@ package com.squadtechs.hdwallpapercollection.main_activity.fragment
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.Volley
 import com.makeramen.roundedimageview.RoundedImageView
 import com.squadtechs.hdwallpapercollection.R
+import com.squadtechs.hdwallpapercollection.activity_wallpapers.ActivityWallpapers
 
 class CategoryAdapter(val context: Context, val activity: Activity, val list: ArrayList<CategoryModel>) :
     RecyclerView.Adapter<CategoryAdapter.CategoryHolder>() {
@@ -31,7 +33,12 @@ class CategoryAdapter(val context: Context, val activity: Activity, val list: Ar
 
     private fun setListener(holder: CategoryHolder, position: Int) {
         holder.touchView.setOnClickListener {
-            Toast.makeText(context, "Touched", Toast.LENGTH_SHORT).show()
+            context.startActivity(
+                Intent(context, ActivityWallpapers::class.java).putExtra(
+                    "category_name",
+                    list[position].category_name
+                ).putExtra("category_key", list[position].category_key)
+            )
         }
     }
 
