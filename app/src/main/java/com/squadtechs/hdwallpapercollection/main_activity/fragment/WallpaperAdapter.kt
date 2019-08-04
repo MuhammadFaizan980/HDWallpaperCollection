@@ -45,8 +45,8 @@ class WallpaperAdapter(val context: Context, val activity: Activity, val list: A
                 holder.imgGrid.setImageBitmap(response)
                 holder.progress.visibility = View.GONE
             },
-            800,
-            600,
+            1024,
+            860,
             ImageView.ScaleType.CENTER,
             null,
             Response.ErrorListener { error ->
@@ -62,7 +62,7 @@ class WallpaperAdapter(val context: Context, val activity: Activity, val list: A
         activity.windowManager.defaultDisplay.getMetrics(displayMetrics)
         val height = displayMetrics.heightPixels
         val width = displayMetrics.widthPixels
-        holder.frame.layoutParams = FrameLayout.LayoutParams((width / 2), ((25 * height) / 100))
+        holder.frame.layoutParams = FrameLayout.LayoutParams((width / 2), ((40 * height) / 100))
         if (position % 2 == 0) {
             holder.frame.setPadding(32, 16, 16, 16)
         } else {
