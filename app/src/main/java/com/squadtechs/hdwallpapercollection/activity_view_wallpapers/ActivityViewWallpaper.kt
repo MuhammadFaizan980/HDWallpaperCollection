@@ -180,8 +180,6 @@ class ActivityViewWallpaper : AppCompatActivity() {
             val path: String = MediaStore.Images.Media.insertImage(contentResolver, bitmap, "wallpaper.jpg", null)
             val intent = Intent(wallpaperManager.getCropAndSetWallpaperIntent(Uri.parse(path)))
             startActivity(intent)
-//            wallpaperManager.setBitmap(bitmap)
-            Toast.makeText(this, "Image set as device wallpaper", Toast.LENGTH_LONG).show()
         }
 
         lView.setOnClickListener {
