@@ -2,6 +2,7 @@ package com.squadtechs.hdwallpapercollection.main_activity.fragment
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.Volley
 import com.makeramen.roundedimageview.RoundedImageView
 import com.squadtechs.hdwallpapercollection.R
+import com.squadtechs.hdwallpapercollection.activity_view_wallpapers.ActivityViewWallpaper
 
 
 class WallpaperAdapter(val context: Context, val activity: Activity, val list: ArrayList<WallpaperModel>) :
@@ -32,7 +34,11 @@ class WallpaperAdapter(val context: Context, val activity: Activity, val list: A
 
     private fun setListener(holder: WallpaperHolder, position: Int) {
         holder.touchView.setOnClickListener {
-            Toast.makeText(context, "Touched", Toast.LENGTH_SHORT).show()
+            context.startActivity(
+                Intent(context, ActivityViewWallpaper::class.java)
+                    .putExtra("category_ref", list[position].category_ref)
+                    .putExtra("position", position)
+            )
         }
     }
 
