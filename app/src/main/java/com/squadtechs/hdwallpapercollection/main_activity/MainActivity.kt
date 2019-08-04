@@ -1,12 +1,16 @@
 package com.squadtechs.hdwallpapercollection.main_activity
 
+import android.content.Context
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -28,10 +32,32 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initViews()
-        prepareToolbar()
-        prepareNavigationView()
-        prepareViewPager()
+        if (checkConnection()) {
+            initViews()
+            prepareToolbar()
+            prepareNavigationView()
+            prepareViewPager()
+        } else {
+            showNetworkErrorDialog()
+        }
+    }
+
+    private fun showNetworkErrorDialog() {
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.setTitle("Warning!")
+        alertDialog.setMessage("Active internet connection is required\nTurn on your wifi or packet data")
+        alertDialog.setCancelable(false)
+        alertDialog.setPositiveButton("Close") {dialogInterface, i ->
+            finish()
+        }
+        alertDialog.show()
+    }
+
+    private fun checkConnection(): Boolean {
+        val connectivityManager: ConnectivityManager =
+            this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
     }
 
     private fun prepareViewPager() {
