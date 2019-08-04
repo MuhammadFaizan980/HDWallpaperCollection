@@ -4,11 +4,14 @@ import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.app.WallpaperManager
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -25,6 +28,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.squadtechs.hdwallpapercollection.R
 import com.squadtechs.hdwallpapercollection.main_activity.fragment.WallpaperModel
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 
@@ -173,7 +177,10 @@ class ActivityViewWallpaper : AppCompatActivity() {
 
         mView.setOnClickListener {
             cDialog.dismiss()
-            wallpaperManager.setBitmap(bitmap)
+            val path: String = MediaStore.Images.Media.insertImage(contentResolver, bitmap, "wallpaper.jpg", null)
+            val intent = Intent(wallpaperManager.getCropAndSetWallpaperIntent(Uri.parse(path)))
+            startActivity(intent)
+//            wallpaperManager.setBitmap(bitmap)
             Toast.makeText(this, "Image set as device wallpaper", Toast.LENGTH_LONG).show()
         }
 
@@ -217,6 +224,11 @@ class ActivityViewWallpaper : AppCompatActivity() {
         if (requestCode == 66 && grantResults.isNotEmpty()) {
             for (i in grantResults) {
                 if (i == PackageManager.PERMISSION_DENIED) {
+                    Toast.makeText(
+                        this,
+                        "Storage permission is required for saving images to storage",
+                        Toast.LENGTH_LONG
+                    ).show()
                     return
                 }
             }
