@@ -1,12 +1,20 @@
 package com.squadtechs.hdwallpapercollection.activity_view_wallpapers
 
+import android.app.AlertDialog
+import android.app.ProgressDialog
+import android.app.WallpaperManager
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
+import com.android.volley.Response
+import com.android.volley.toolbox.ImageRequest
+import com.android.volley.toolbox.Volley
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -101,8 +109,62 @@ class ActivityViewWallpaper : AppCompatActivity() {
                 editor.apply()
             }
         }
-        imgSetWallpaper.setOnClickListener { }
+        imgSetWallpaper.setOnClickListener {
+            val progressDialog = getProgressDialog()
+            progressDialog.show()
+            val requestQueue = Volley.newRequestQueue(this)
+            val imageRequest = ImageRequest(
+                list[position].wallpaper_image_url,
+                Response.Listener { response ->
+                    progressDialog.dismiss()
+                    showOptionDialog(response)
+//                    val wallpaperManager = WallpaperManager.getInstance(this)
+//                    wallpaperManager.setBitmap(response, null, true, WallpaperManager.FLAG_LOCK)
+                },
+                0,
+                0,
+                ImageView.ScaleType.CENTER,
+                null,
+                Response.ErrorListener { error ->
+                    progressDialog.dismiss()
+                    Toast.makeText(this, "There was an error downloading this wallpaper", Toast.LENGTH_LONG).show()
+                })
+            requestQueue.add(imageRequest)
+        }
         imgDownloadWallpaper.setOnClickListener { }
     }
 
+    private fun showOptionDialog(bitmap: Bitmap) {
+        val view = layoutInflater.inflate(R.layout.custom_dialog, null, false)
+        val mDialog = AlertDialog.Builder(this)
+        mDialog.setView(view)
+        val cDialog = mDialog.create()
+        cDialog.show()
+
+        val mView: View = view.findViewById(R.id.touch_phone)
+        val lView: View = view.findViewById(R.id.touch_lock)
+
+        val wallpaperManager = WallpaperManager.getInstance(this)
+
+        mView.setOnClickListener {
+            cDialog.dismiss()
+            wallpaperManager.setBitmap(bitmap)
+            Toast.makeText(this, "Image set as device wallpaper", Toast.LENGTH_LONG).show()
+        }
+
+        lView.setOnClickListener {
+            cDialog.dismiss()
+            wallpaperManager.setBitmap(bitmap, null, true, WallpaperManager.FLAG_LOCK)
+            Toast.makeText(this, "Image set as lock screen wallpaper", Toast.LENGTH_LONG).show()
+        }
+
+    }
+
+    private fun getProgressDialog(): ProgressDialog {
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setCancelable(false)
+        progressDialog.setTitle("Wait")
+        progressDialog.setMessage("Downloading wallpaper")
+        return progressDialog
+    }
 }
