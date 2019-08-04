@@ -10,7 +10,8 @@
         android:id="@+id/img_grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/forest"
+        android:src="@drawable/dummy_back"
+        android:scaleType="centerCrop"
         app:riv_corner_radius="12dp" />
 
     <TextView
