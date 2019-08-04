@@ -5,12 +5,16 @@ import android.app.ProgressDialog
 import android.app.WallpaperManager
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.os.Environment
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
@@ -21,6 +25,8 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.squadtechs.hdwallpapercollection.R
 import com.squadtechs.hdwallpapercollection.main_activity.fragment.WallpaperModel
+import java.io.File
+import java.io.FileOutputStream
 
 class ActivityViewWallpaper : AppCompatActivity() {
 
@@ -32,6 +38,7 @@ class ActivityViewWallpaper : AppCompatActivity() {
     private lateinit var imgDownloadWallpaper: ImageView
     private lateinit var pref: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
+    private var bitmap: Bitmap? = null
     private var position = 0
     private val collectionReference = FirebaseFirestore.getInstance().collection("wallpapers")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -118,8 +125,6 @@ class ActivityViewWallpaper : AppCompatActivity() {
                 Response.Listener { response ->
                     progressDialog.dismiss()
                     showOptionDialog(response)
-//                    val wallpaperManager = WallpaperManager.getInstance(this)
-//                    wallpaperManager.setBitmap(response, null, true, WallpaperManager.FLAG_LOCK)
                 },
                 0,
                 0,
@@ -131,7 +136,27 @@ class ActivityViewWallpaper : AppCompatActivity() {
                 })
             requestQueue.add(imageRequest)
         }
-        imgDownloadWallpaper.setOnClickListener { }
+        imgDownloadWallpaper.setOnClickListener {
+            val progressDialog = getProgressDialog()
+            progressDialog.show()
+            val requestQueue = Volley.newRequestQueue(this)
+            val imageRequest = ImageRequest(
+                list[position].wallpaper_image_url,
+                Response.Listener { response ->
+                    progressDialog.dismiss()
+                    bitmap = response
+                    checkPerm()
+                },
+                0,
+                0,
+                ImageView.ScaleType.CENTER,
+                null,
+                Response.ErrorListener { error ->
+                    progressDialog.dismiss()
+                    Toast.makeText(this, "There was an error downloading this wallpaper", Toast.LENGTH_LONG).show()
+                })
+            requestQueue.add(imageRequest)
+        }
     }
 
     private fun showOptionDialog(bitmap: Bitmap) {
@@ -167,4 +192,49 @@ class ActivityViewWallpaper : AppCompatActivity() {
         progressDialog.setMessage("Downloading wallpaper")
         return progressDialog
     }
+
+    private fun checkPerm() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_DENIED
+            || ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_DENIED
+        ) {
+            val arr = arrayOf(
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            ActivityCompat.requestPermissions(this@ActivityViewWallpaper, arr, 66)
+        } else {
+            saveImage()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (requestCode == 66 && grantResults.isNotEmpty()) {
+            for (i in grantResults) {
+                if (i == PackageManager.PERMISSION_DENIED) {
+                    return
+                }
+            }
+            saveImage()
+        }
+    }
+
+    private fun saveImage() {
+        val fileName = System.currentTimeMillis().toString() + ".jpg"
+        val filePath: File = Environment.getExternalStorageDirectory()
+        val dir: File = File(filePath.absolutePath + "/HD Wallpapers Collection/")
+        dir.mkdir()
+        val file: File = File(dir, fileName)
+        val outputStream = FileOutputStream(file)
+        bitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+        Toast.makeText(this, "Wallpaper saved to internal storage", Toast.LENGTH_LONG).show()
+        outputStream.flush()
+        outputStream.close()
+    }
+
 }
