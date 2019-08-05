@@ -12,4 +12,5 @@
     <string name="no_favorite_found">No favorite found</string>
     <string name="lockscreen_wallpaper">Lockscreen Wallpaper</string>
     <string name="device_wallpaper">Device Wallpaper</string>
+    <string name="ad_unit_id">ca-app-pub-3940256099942544~3347511713</string>
 </resources>

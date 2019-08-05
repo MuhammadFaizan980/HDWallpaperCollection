@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.squadtechs.hdwallpapercollection.R
@@ -26,6 +28,7 @@ class ActivityFavorites : AppCompatActivity() {
     private lateinit var adapter: WallpaperAdapter
     private lateinit var list: ArrayList<WallpaperModel>
     private lateinit var pref: SharedPreferences
+    private lateinit var bannerAd: AdView
     private val collectionReference = FirebaseFirestore.getInstance().collection("wallpapers")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +37,7 @@ class ActivityFavorites : AppCompatActivity() {
         initViews()
         populateToolbar()
         populateRecyclerVIew()
+        initAd()
     }
 
     private fun populateRecyclerVIew() {
@@ -78,11 +82,17 @@ class ActivityFavorites : AppCompatActivity() {
         list = ArrayList()
         adapter = WallpaperAdapter(this, this@ActivityFavorites, list, true)
         pref = getSharedPreferences("favorite", Context.MODE_PRIVATE)
+        bannerAd = findViewById(R.id.banner_ad)
     }
 
     override fun onStart() {
         super.onStart()
         txtInfo.visibility = View.GONE
+    }
+
+    private fun initAd() {
+        val adRequest: AdRequest = AdRequest.Builder().build()
+        bannerAd.loadAd(adRequest)
     }
 
 }

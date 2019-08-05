@@ -22,7 +22,7 @@ class FragmentViewWallpaper : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_fragmet_view_wallpaper, container, false)
+        val view = inflater.inflate(R.layout.fragmet_view_wallpaper, container, false)
         initView(view)
         loadImage()
         return view

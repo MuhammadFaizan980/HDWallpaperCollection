@@ -20,6 +20,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.navigation.NavigationView
 import com.squadtechs.hdwallpapercollection.R
 import com.squadtechs.hdwallpapercollection.activity_favorites.ActivityFavorites
@@ -34,16 +37,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var pagerAdapter: CustomPagerAdapter
     private lateinit var txtCategory: TextView
     private lateinit var txtNew: TextView
+    private lateinit var bannerAd: AdView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713")
         if (checkConnection()) {
             initViews()
             prepareToolbar()
             prepareNavigationView()
             prepareViewPager()
             checkPerm()
+            initAd()
         } else {
             showNetworkErrorDialog()
         }
@@ -118,6 +124,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         pagerAdapter = CustomPagerAdapter(supportFragmentManager)
         txtCategory = findViewById(R.id.txt_categories)
         txtNew = findViewById(R.id.txt_new)
+        bannerAd = findViewById(R.id.banner_ad)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -177,6 +184,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
         }
+    }
+
+    private fun initAd() {
+        val adRequest: AdRequest = AdRequest.Builder().build()
+        bannerAd.loadAd(adRequest)
     }
 
 }

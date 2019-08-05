@@ -28,17 +28,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="108dp"
+                android:layout_marginBottom="55dp"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-            <com.wang.avi.AVLoadingIndicatorView
-                android:id="@+id/loader"
-                style="@style/AVLoadingIndicatorView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center"
-                android:visibility="invisible"
-                app:indicatorColor="#656565"
-                app:indicatorName="BallClipRotatePulseIndicator" />
+            <include layout="@layout/banner_ad" />
 
         </FrameLayout>
 

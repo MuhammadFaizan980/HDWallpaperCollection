@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -22,6 +24,7 @@ class ActivityWallpapers : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: WallpaperAdapter
     private lateinit var list: ArrayList<WallpaperModel>
+    private lateinit var bannerAd: AdView
     private val collectionReference = FirebaseFirestore.getInstance().collection("wallpapers")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +33,7 @@ class ActivityWallpapers : AppCompatActivity() {
         initView()
         prepareToolbar()
         populateRecyclerView()
+        initAd()
     }
 
     private fun populateRecyclerView() {
@@ -73,6 +77,12 @@ class ActivityWallpapers : AppCompatActivity() {
         recyclerView = findViewById(R.id.recycler_view)
         list = ArrayList()
         adapter = WallpaperAdapter(this, this@ActivityWallpapers, list, false)
+        bannerAd = findViewById(R.id.banner_ad)
+    }
+
+    private fun initAd() {
+        val adRequest: AdRequest = AdRequest.Builder().build()
+        bannerAd.loadAd(adRequest)
     }
 
 }
