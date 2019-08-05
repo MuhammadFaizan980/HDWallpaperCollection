@@ -1,6 +1,7 @@
 package com.squadtechs.hdwallpapercollection.main_activity
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
@@ -13,6 +14,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.navigation.NavigationView
@@ -37,6 +40,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             prepareToolbar()
             prepareNavigationView()
             prepareViewPager()
+            checkPerm()
         } else {
             showNetworkErrorDialog()
         }
@@ -47,7 +51,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         alertDialog.setTitle("Warning!")
         alertDialog.setMessage("Active internet connection is required\nTurn on your wifi or packet data")
         alertDialog.setCancelable(false)
-        alertDialog.setPositiveButton("Close") {dialogInterface, i ->
+        alertDialog.setPositiveButton("Close") { dialogInterface, i ->
             finish()
         }
         alertDialog.show()
@@ -136,6 +140,35 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         txtCategory.setTextColor(Color.parseColor("#FFC9C9C9"))
         txtNew.setBackgroundColor(Color.parseColor("#FF2C2C2C"))
         txtCategory.setBackgroundColor(Color.parseColor("#424242"))
+    }
+
+    private fun checkPerm() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_DENIED
+            || ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_DENIED
+        ) {
+            val arr = arrayOf(
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            ActivityCompat.requestPermissions(this@MainActivity, arr, 65)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (requestCode == 65 && grantResults.isNotEmpty()) {
+            for (i in grantResults) {
+                if (i == PackageManager.PERMISSION_DENIED) {
+                    Toast.makeText(this, "Storage permission is required for this app", Toast.LENGTH_LONG).show()
+                    return
+                }
+            }
+        }
     }
 
 }

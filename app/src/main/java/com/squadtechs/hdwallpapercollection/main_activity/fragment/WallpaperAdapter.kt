@@ -37,7 +37,7 @@ class WallpaperAdapter(val context: Context, val activity: Activity, val list: A
             context.startActivity(
                 Intent(context, ActivityViewWallpaper::class.java)
                     .putExtra("category_ref", list[position].category_ref)
-                    .putExtra("position", position)
+                    .putExtra("position", position).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             )
         }
     }

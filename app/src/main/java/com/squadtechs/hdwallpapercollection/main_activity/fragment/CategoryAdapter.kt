@@ -37,7 +37,7 @@ class CategoryAdapter(val context: Context, val activity: Activity, val list: Ar
                 Intent(context, ActivityWallpapers::class.java).putExtra(
                     "category_name",
                     list[position].category_name
-                ).putExtra("category_key", list[position].category_key)
+                ).putExtra("category_key", list[position].category_key).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             )
         }
     }
