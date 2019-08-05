@@ -27,8 +27,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.squadtechs.hdwallpapercollection.R
+import com.squadtechs.hdwallpapercollection.activity_favorites.ActivityFavorites
 import com.squadtechs.hdwallpapercollection.main_activity.fragment.WallpaperModel
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 
@@ -82,9 +82,17 @@ class ActivityViewWallpaper : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val querySnapshot: QuerySnapshot = task.result!!
                     for (i in querySnapshot.documents) {
-                        val obj: WallpaperModel = i.toObject(WallpaperModel::class.java)!!
-                        obj.wallpaper_key = i.id
-                        list.add(obj)
+                        if (intent!!.extras!!.getBoolean("is_from_fav")) {
+                            if (pref.getBoolean(i.id, false)) {
+                                val obj = i.toObject(WallpaperModel::class.java)
+                                obj!!.wallpaper_key = i.id
+                                list.add(obj)
+                            }
+                        } else {
+                            val obj: WallpaperModel = i.toObject(WallpaperModel::class.java)!!
+                            obj.wallpaper_key = i.id
+                            list.add(obj)
+                        }
                     }
                     viewPagerAdapter = MyPagerAdapter(list, supportFragmentManager)
                     viewPager.adapter = viewPagerAdapter
@@ -245,6 +253,15 @@ class ActivityViewWallpaper : AppCompatActivity() {
         Toast.makeText(this, "Wallpaper saved to internal storage", Toast.LENGTH_LONG).show()
         outputStream.flush()
         outputStream.close()
+    }
+
+    override fun onBackPressed() {
+        if (intent!!.extras!!.getBoolean("is_from_fav")) {
+            startActivity(Intent(this, ActivityFavorites::class.java))
+            finish()
+        } else {
+            finish()
+        }
     }
 
 }

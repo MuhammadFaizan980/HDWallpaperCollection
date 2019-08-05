@@ -1,6 +1,7 @@
 package com.squadtechs.hdwallpapercollection.main_activity
 
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.ConnectivityManager
@@ -20,6 +21,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.navigation.NavigationView
 import com.squadtechs.hdwallpapercollection.R
+import com.squadtechs.hdwallpapercollection.activity_favorites.ActivityFavorites
 import com.squadtechs.hdwallpapercollection.main_activity.PagerAdapter.CustomPagerAdapter
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -117,8 +119,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         txtNew = findViewById(R.id.txt_new)
     }
 
-    override fun onNavigationItemSelected(p0: MenuItem): Boolean {
-        Toast.makeText(this, "clicked", Toast.LENGTH_SHORT).show()
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.item_favorites -> {
+                startActivity(Intent(this, ActivityFavorites::class.java))
+            }
+        }
         return true
     }
 

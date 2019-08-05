@@ -17,7 +17,12 @@ import com.squadtechs.hdwallpapercollection.R
 import com.squadtechs.hdwallpapercollection.activity_view_wallpapers.ActivityViewWallpaper
 
 
-class WallpaperAdapter(val context: Context, val activity: Activity, val list: ArrayList<WallpaperModel>) :
+class WallpaperAdapter(
+    val context: Context,
+    val activity: Activity,
+    val list: ArrayList<WallpaperModel>,
+    val isFromFav: Boolean
+) :
     RecyclerView.Adapter<WallpaperAdapter.WallpaperHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WallpaperHolder =
         WallpaperHolder(LayoutInflater.from(context).inflate(R.layout.grid_cell, parent, false))
@@ -37,10 +42,16 @@ class WallpaperAdapter(val context: Context, val activity: Activity, val list: A
             context.startActivity(
                 Intent(context, ActivityViewWallpaper::class.java)
                     .putExtra("category_ref", list[position].category_ref)
-                    .putExtra("position", position).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .putExtra("position", position)
+                    .putExtra("is_from_fav", isFromFav)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             )
+            if (isFromFav) {
+                (context as Activity).finish()
+            }
         }
     }
+
 
     private fun populateViews(holder: WallpaperHolder, position: Int) {
         val requestQueue = Volley.newRequestQueue(context)
