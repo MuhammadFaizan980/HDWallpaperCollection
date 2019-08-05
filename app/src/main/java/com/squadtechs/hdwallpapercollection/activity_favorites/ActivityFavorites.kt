@@ -5,6 +5,8 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -19,6 +21,7 @@ import com.squadtechs.hdwallpapercollection.main_activity.fragment.WallpaperMode
 class ActivityFavorites : AppCompatActivity() {
 
     private lateinit var toolbar: Toolbar
+    private lateinit var txtInfo: TextView
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: WallpaperAdapter
     private lateinit var list: ArrayList<WallpaperModel>
@@ -48,6 +51,9 @@ class ActivityFavorites : AppCompatActivity() {
                             list.add(obj)
                         }
                     }
+                    if (list.isEmpty()) {
+                        txtInfo.visibility = View.VISIBLE
+                    }
 
                 } else {
                     Toast.makeText(this, firebaseFirestoreException!!.message!!, Toast.LENGTH_LONG).show()
@@ -66,11 +72,17 @@ class ActivityFavorites : AppCompatActivity() {
     }
 
     private fun initViews() {
+        txtInfo = findViewById(R.id.txt_info)
         toolbar = findViewById(R.id.toolbar)
         recyclerView = findViewById(R.id.recycler_view)
         list = ArrayList()
         adapter = WallpaperAdapter(this, this@ActivityFavorites, list, true)
         pref = getSharedPreferences("favorite", Context.MODE_PRIVATE)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        txtInfo.visibility = View.GONE
     }
 
 }
