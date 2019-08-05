@@ -10,4 +10,6 @@
     <string name="rate_us">Rate Us</string>
     <string name="share">Share</string>
     <string name="no_favorite_found">No favorite found</string>
+    <string name="lockscreen_wallpaper">Lockscreen Wallpaper</string>
+    <string name="device_wallpaper">Device Wallpaper</string>
 </resources>

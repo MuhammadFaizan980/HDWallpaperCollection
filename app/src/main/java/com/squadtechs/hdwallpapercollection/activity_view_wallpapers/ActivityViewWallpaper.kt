@@ -1,6 +1,6 @@
 package com.squadtechs.hdwallpapercollection.activity_view_wallpapers
 
-import android.app.AlertDialog
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.app.WallpaperManager
 import android.content.Context
@@ -172,26 +172,25 @@ class ActivityViewWallpaper : AppCompatActivity() {
     }
 
     private fun showOptionDialog(bitmap: Bitmap) {
-        val view = layoutInflater.inflate(R.layout.custom_dialog, null, false)
-        val mDialog = AlertDialog.Builder(this)
-        mDialog.setView(view)
-        val cDialog = mDialog.create()
-        cDialog.show()
+        //   val view = layoutInflater.inflate(R.layout.custom_dialog, null, false)
+        val mDialog = Dialog(this)
+        mDialog.setContentView(R.layout.custom_dialog)
+        mDialog.show()
 
-        val mView: View = view.findViewById(R.id.touch_phone)
-        val lView: View = view.findViewById(R.id.touch_lock)
+        val mView: View = mDialog.findViewById(R.id.touch_phone)
+        val lView: View = mDialog.findViewById(R.id.touch_lock)
 
         val wallpaperManager = WallpaperManager.getInstance(this)
 
         mView.setOnClickListener {
-            cDialog.dismiss()
+            mDialog.dismiss()
             val path: String = MediaStore.Images.Media.insertImage(contentResolver, bitmap, "wallpaper.jpg", null)
             val intent = Intent(wallpaperManager.getCropAndSetWallpaperIntent(Uri.parse(path)))
             startActivity(intent)
         }
 
         lView.setOnClickListener {
-            cDialog.dismiss()
+            mDialog.dismiss()
             wallpaperManager.setBitmap(bitmap, null, true, WallpaperManager.FLAG_LOCK)
             Toast.makeText(this, "Image set as lock screen wallpaper", Toast.LENGTH_LONG).show()
         }
