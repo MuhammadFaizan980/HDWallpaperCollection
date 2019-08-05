@@ -147,7 +147,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         txtNew.setBackgroundColor(Color.parseColor("#424242"))
     }
 
-    public fun txtNewListener(view: View) {
+    fun txtNewListener(view: View) {
         viewPager.currentItem = 1
         txtNew.textSize = 18f
         txtCategory.textSize = 14f
