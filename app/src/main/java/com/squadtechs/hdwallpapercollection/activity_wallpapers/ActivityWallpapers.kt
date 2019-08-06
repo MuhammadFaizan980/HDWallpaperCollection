@@ -76,7 +76,7 @@ class ActivityWallpapers : AppCompatActivity() {
         toolbar = findViewById(R.id.toolbar)
         recyclerView = findViewById(R.id.recycler_view)
         list = ArrayList()
-        adapter = WallpaperAdapter(this, this@ActivityWallpapers, list, false)
+        adapter = WallpaperAdapter(this, this@ActivityWallpapers, list, false, false)
         bannerAd = findViewById(R.id.banner_ad)
     }
 

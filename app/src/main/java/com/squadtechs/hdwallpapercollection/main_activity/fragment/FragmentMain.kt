@@ -58,7 +58,7 @@ class FragmentMain : Fragment() {
         } else {
             //new wallpaper code
             val list = ArrayList<WallpaperModel>()
-            val adapter = WallpaperAdapter(activity!!.applicationContext, activity!!, list, false)
+            val adapter = WallpaperAdapter(activity!!.applicationContext, activity!!, list, false, true)
             recyclerView.layoutManager = GridLayoutManager(activity!!.applicationContext, 2)
             recyclerView.adapter = adapter
             collectionReference.orderBy("server_time_stamp", Query.Direction.DESCENDING)

@@ -12,6 +12,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -44,7 +45,7 @@ class ActivityViewWallpaper : AppCompatActivity() {
     private lateinit var editor: SharedPreferences.Editor
     private var bitmap: Bitmap? = null
     private var position = 0
-    private val collectionReference = FirebaseFirestore.getInstance().collection("wallpapers")
+    private lateinit var query: Query
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wiew_wallpaper)
@@ -76,8 +77,16 @@ class ActivityViewWallpaper : AppCompatActivity() {
     }
 
     private fun getData() {
-        collectionReference.orderBy("server_time_stamp", Query.Direction.DESCENDING)
-            .whereEqualTo("category_ref", intent!!.extras!!.getString("category_ref")).get()
+
+        if (intent!!.extras!!.getBoolean("is_from_weekly", false) || intent!!.extras!!.getBoolean("is_from_fav", false)) {
+            query = FirebaseFirestore.getInstance().collection("wallpapers")
+                .orderBy("server_time_stamp", Query.Direction.DESCENDING)
+        } else {
+            query = FirebaseFirestore.getInstance().collection("wallpapers")
+                .orderBy("server_time_stamp", Query.Direction.DESCENDING)
+                .whereEqualTo("category_ref", intent!!.extras!!.getString("category_ref"))
+        }
+        query.get()
             .addOnCompleteListener { task: Task<QuerySnapshot> ->
                 if (task.isSuccessful) {
                     val querySnapshot: QuerySnapshot = task.result!!
@@ -87,11 +96,13 @@ class ActivityViewWallpaper : AppCompatActivity() {
                                 val obj = i.toObject(WallpaperModel::class.java)
                                 obj!!.wallpaper_key = i.id
                                 list.add(obj)
+                                Log.i("dxdiag", "from Favorite")
                             }
                         } else {
                             val obj: WallpaperModel = i.toObject(WallpaperModel::class.java)!!
                             obj.wallpaper_key = i.id
                             list.add(obj)
+                            Log.i("dxdiag", "not from Favorite")
                         }
                     }
                     viewPagerAdapter = MyPagerAdapter(list, supportFragmentManager)

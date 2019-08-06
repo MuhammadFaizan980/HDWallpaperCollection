@@ -80,7 +80,7 @@ class ActivityFavorites : AppCompatActivity() {
         toolbar = findViewById(R.id.toolbar)
         recyclerView = findViewById(R.id.recycler_view)
         list = ArrayList()
-        adapter = WallpaperAdapter(this, this@ActivityFavorites, list, true)
+        adapter = WallpaperAdapter(this, this@ActivityFavorites, list, true, false)
         pref = getSharedPreferences("favorite", Context.MODE_PRIVATE)
         bannerAd = findViewById(R.id.banner_ad)
     }

@@ -21,7 +21,8 @@ class WallpaperAdapter(
     val context: Context,
     val activity: Activity,
     val list: ArrayList<WallpaperModel>,
-    val isFromFav: Boolean
+    val isFromFav: Boolean,
+    val isFromWeekly: Boolean
 ) :
     RecyclerView.Adapter<WallpaperAdapter.WallpaperHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WallpaperHolder =
@@ -44,6 +45,7 @@ class WallpaperAdapter(
                     .putExtra("category_ref", list[position].category_ref)
                     .putExtra("position", position)
                     .putExtra("is_from_fav", isFromFav)
+                    .putExtra("is_from_weekly", isFromWeekly)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             )
             if (isFromFav) {
