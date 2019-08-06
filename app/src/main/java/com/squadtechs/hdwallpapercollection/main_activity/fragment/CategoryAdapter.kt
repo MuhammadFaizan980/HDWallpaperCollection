@@ -7,14 +7,14 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.FrameLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.Response
-import com.android.volley.toolbox.ImageRequest
-import com.android.volley.toolbox.Volley
 import com.makeramen.roundedimageview.RoundedImageView
 import com.squadtechs.hdwallpapercollection.R
 import com.squadtechs.hdwallpapercollection.activity_wallpapers.ActivityWallpapers
+import com.squareup.picasso.Picasso
 
 class CategoryAdapter(val context: Context, val activity: Activity, val list: ArrayList<CategoryModel>) :
     RecyclerView.Adapter<CategoryAdapter.CategoryHolder>() {
@@ -43,23 +43,30 @@ class CategoryAdapter(val context: Context, val activity: Activity, val list: Ar
     }
 
     private fun populateViews(holder: CategoryHolder, position: Int) {
-        val requestQueue = Volley.newRequestQueue(context)
-        val imageRequest = ImageRequest(
-            list[position].category_image_url,
-            Response.Listener { response ->
-                holder.imgGrid.scaleType = ImageView.ScaleType.CENTER
-                holder.imgGrid.setImageBitmap(response)
-                holder.progress.visibility = View.GONE
-            },
-            1024,
-            860,
-            ImageView.ScaleType.CENTER,
-            null,
-            Response.ErrorListener { error ->
-                holder.progress.visibility = View.GONE
-                Toast.makeText(context, "Error loading Image", Toast.LENGTH_LONG).show()
-            })
-        requestQueue.add(imageRequest)
+//        val requestQueue = Volley.newRequestQueue(context)
+//        val imageRequest = ImageRequest(
+//            list[position].category_image_url,
+//            Response.Listener { response ->
+//                holder.imgGrid.scaleType = ImageView.ScaleType.CENTER
+//                holder.imgGrid.setImageBitmap(response)
+//                holder.progress.visibility = View.GONE
+//            },
+//            1024,
+//            860,
+//            ImageView.ScaleType.CENTER,
+//            null,
+//            Response.ErrorListener { error ->
+//                holder.progress.visibility = View.GONE
+//                Toast.makeText(context, "Error loading Image ${error.networkResponse}", Toast.LENGTH_LONG).show()
+//            }).setRetryPolicy(
+//            DefaultRetryPolicy(
+//                20000,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+//            )
+//        )
+//        requestQueue.add(imageRequest)
+        Picasso.get().load(list[position].category_image_url).resize(1024, 860).into(holder.imgGrid)
         holder.txtCategory.text = list[position].category_name
     }
 

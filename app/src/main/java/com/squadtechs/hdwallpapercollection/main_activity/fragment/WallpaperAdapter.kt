@@ -9,12 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.Volley
 import com.makeramen.roundedimageview.RoundedImageView
 import com.squadtechs.hdwallpapercollection.R
 import com.squadtechs.hdwallpapercollection.activity_view_wallpapers.ActivityViewWallpaper
+import com.squareup.picasso.Picasso
 
 
 class WallpaperAdapter(
@@ -56,23 +58,30 @@ class WallpaperAdapter(
 
 
     private fun populateViews(holder: WallpaperHolder, position: Int) {
-        val requestQueue = Volley.newRequestQueue(context)
-        val imageRequest = ImageRequest(
-            list[position].wallpaper_image_url,
-            Response.Listener { response ->
-                holder.imgGrid.scaleType = ImageView.ScaleType.CENTER
-                holder.imgGrid.setImageBitmap(response)
-                holder.progress.visibility = View.GONE
-            },
-            1024,
-            860,
-            ImageView.ScaleType.CENTER,
-            null,
-            Response.ErrorListener { error ->
-                Toast.makeText(context, "Error loading Image", Toast.LENGTH_LONG).show()
-                holder.progress.visibility = View.GONE
-            })
-        requestQueue.add(imageRequest)
+//        val requestQueue = Volley.newRequestQueue(context)
+//        val imageRequest = ImageRequest(
+//            list[position].wallpaper_image_url,
+//            Response.Listener { response ->
+//                holder.imgGrid.scaleType = ImageView.ScaleType.CENTER
+//                holder.imgGrid.setImageBitmap(response)
+//                holder.progress.visibility = View.GONE
+//            },
+//            1024,
+//            860,
+//            ImageView.ScaleType.CENTER,
+//            null,
+//            Response.ErrorListener { error ->
+//                Toast.makeText(context, "Error loading Image", Toast.LENGTH_LONG).show()
+//                holder.progress.visibility = View.GONE
+//            }).setRetryPolicy(
+//            DefaultRetryPolicy(
+//                20000,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+//            )
+//        )
+//        requestQueue.add(imageRequest)
+        Picasso.get().load(list[position].wallpaper_image_url).resize(1024,860).into(holder.imgGrid)
         holder.txtCategory.visibility = View.GONE
     }
 
@@ -81,7 +90,7 @@ class WallpaperAdapter(
         activity.windowManager.defaultDisplay.getMetrics(displayMetrics)
         val height = displayMetrics.heightPixels
         val width = displayMetrics.widthPixels
-        holder.frame.layoutParams = FrameLayout.LayoutParams((width / 2), ((40 * height) / 100))
+        holder.frame.layoutParams = FrameLayout.LayoutParams((width / 2), ((35 * height) / 100))
         if (position % 2 == 0) {
             holder.frame.setPadding(32, 16, 16, 16)
         } else {

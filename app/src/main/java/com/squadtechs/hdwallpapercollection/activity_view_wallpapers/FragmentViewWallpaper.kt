@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Response
 import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.Volley
@@ -47,7 +48,13 @@ class FragmentViewWallpaper : Fragment() {
                     "There was an error loading this wallpaper",
                     Toast.LENGTH_LONG
                 ).show()
-            })
+            }).setRetryPolicy(
+            DefaultRetryPolicy(
+                20000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            )
+        )
         requestQueue.add(imageRequest)
     }
 
